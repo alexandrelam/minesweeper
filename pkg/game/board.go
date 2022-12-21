@@ -3,6 +3,8 @@ package game
 import (
 	"fmt"
 	"math/rand"
+
+	"github.com/fatih/color"
 )
 
 type Board struct {
@@ -13,6 +15,7 @@ type Board struct {
 }
 
 func NewBoard(numberRows, numberColumns, numberBombs int) *Board {
+
 	if numberBombs > numberRows*numberColumns {
 		panic("too many bombs")
 	}
@@ -54,16 +57,19 @@ func NewBoard(numberRows, numberColumns, numberBombs int) *Board {
 }
 
 func (b *Board) Display() {
+	whilte := color.New(color.FgWhite)
+	boldWhite := whilte.Add(color.Bold)
+
 	fmt.Printf("   ")
 	for row := 0; row < b.numberRows; row++ {
-		fmt.Printf("%2d ", row)
+		boldWhite.Printf("%2d ", row)
 	}
 	println()
 
 	for row := 0; row < b.numberRows; row++ {
 		for column := 0; column < b.numberColumns; column++ {
 			if column == 0 {
-				fmt.Printf("%2d ", row)
+				boldWhite.Printf("%2d ", row)
 			}
 
 			if b.squares[row][column].isRevealed() {
