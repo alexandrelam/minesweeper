@@ -59,6 +59,7 @@ func NewBoard(numberRows, numberColumns, numberBombs int) *Board {
 func (b *Board) Display() {
 	whilte := color.New(color.FgWhite)
 	boldWhite := whilte.Add(color.Bold)
+	redlte := color.New(color.FgRed)
 
 	fmt.Printf("   ")
 	for row := 0; row < b.numberRows; row++ {
@@ -83,7 +84,7 @@ func (b *Board) Display() {
 					}
 				}
 			} else if b.squares[row][column].isFlagged() {
-				print(" F ")
+				redlte.Print(" F ")
 			} else {
 				print(" . ")
 			}

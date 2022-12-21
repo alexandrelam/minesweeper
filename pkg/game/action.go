@@ -3,6 +3,7 @@ package game
 import "fmt"
 
 func (b *Board) Flag(row, column int) {
+	fmt.Println("flag", row, column)
 	b.squares[row][column].flag()
 
 	b.Display()
@@ -13,6 +14,8 @@ func (b *Board) Unflag(row, column int) {
 }
 
 func (b *Board) Play(row, column int) {
+	fmt.Println("play", row, column)
+
 	if !b.isValid(row, column) {
 		fmt.Println("invalid position")
 		return
@@ -31,24 +34,19 @@ func (b *Board) Play(row, column int) {
 
 	b.squares[row][column].reveal()
 
-	b.Display()
+	if b.squares[row][column].value == 0 || (b.squares[row][column].isRevealed() && b.squares[row][column].value == b.countAdjacentFlag(row, column)) {
+		for i := -1; i <= 1; i++ {
+			for j := -1; j <= 1; j++ {
+				if i == 0 && j == 0 {
+					continue
+				}
 
-	if b.squares[row][column].value != 0 {
-		return
-	}
-
-	for i := -1; i <= 1; i++ {
-		for j := -1; j <= 1; j++ {
-			if i == 0 && j == 0 {
-				continue
+				b.playRecursiveUtil(row+i, column+j)
 			}
-
-			b.playRecursiveUtil(row+i, column+j)
 		}
 	}
 
 	b.Display()
-
 }
 
 func (b *Board) playRecursiveUtil(row, column int) {
@@ -79,6 +77,8 @@ func (b *Board) revealAll() {
 			square.reveal()
 		}
 	}
+
+	b.Display()
 }
 
 func (b *Board) isValid(row, column int) bool {
@@ -95,6 +95,24 @@ func (b *Board) countAdjacentMines(row, column int) int {
 			}
 
 			if b.squares[row+i][column+j].isBomb {
+				count++
+			}
+		}
+	}
+
+	return count
+}
+
+func (b *Board) countAdjacentFlag(row, column int) int {
+	count := 0
+
+	for i := -1; i <= 1; i++ {
+		for j := -1; j <= 1; j++ {
+			if !b.isValid(row+i, column+j) {
+				continue
+			}
+
+			if b.squares[row+i][column+j].isFlagged() {
 				count++
 			}
 		}
