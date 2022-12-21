@@ -8,9 +8,10 @@ func main() {
 	board := game.NewBoard(16, 16, 40)
 	board.Display()
 	board.Play(0, 0)
-	board.Display()
 	board.Play(15, 0)
-	board.Display()
 	board.Play(2, 2)
-	board.Display()
+	board.Flag(9, 2)
+	board.Flag(13, 2)
+	board.Play(12, 3)
+	board.Play(13, 2)
 }

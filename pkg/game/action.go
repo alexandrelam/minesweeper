@@ -4,6 +4,8 @@ import "fmt"
 
 func (b *Board) Flag(row, column int) {
 	b.squares[row][column].flag()
+
+	b.Display()
 }
 
 func (b *Board) Unflag(row, column int) {
@@ -29,6 +31,8 @@ func (b *Board) Play(row, column int) {
 
 	b.squares[row][column].reveal()
 
+	b.Display()
+
 	if b.squares[row][column].value != 0 {
 		return
 	}
@@ -42,6 +46,8 @@ func (b *Board) Play(row, column int) {
 			b.playRecursiveUtil(row+i, column+j)
 		}
 	}
+
+	b.Display()
 
 }
 
