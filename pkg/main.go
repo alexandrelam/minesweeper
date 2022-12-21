@@ -1,10 +1,17 @@
 package main
 
 import (
+	"fmt"
+	"time"
+
 	"github.com/alexandrelam/minesweeper/pkg/game"
 )
 
 func main() {
+
+	// start time
+	start := time.Now()
+
 	board := game.NewBoard(16, 16, 40)
 	board.Display()
 	board.Play(0, 0)
@@ -28,4 +35,7 @@ func main() {
 	board.Play(14, 2)
 	board.Flag(10, 3)
 	board.Play(10, 2)
+
+	elapsed := time.Since(start)
+	fmt.Printf("ran in %d ms", elapsed.Milliseconds())
 }
