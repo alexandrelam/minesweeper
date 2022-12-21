@@ -76,7 +76,11 @@ func (b *Board) Display() {
 				if b.squares[row][column].isBomb {
 					print(" B ")
 				} else {
-					fmt.Printf(" %d ", b.squares[row][column].value)
+					if b.squares[row][column].value == 0 {
+						print("   ")
+					} else {
+						fmt.Printf(" %d ", b.squares[row][column].value)
+					}
 				}
 			} else if b.squares[row][column].isFlagged() {
 				print(" F ")
@@ -90,16 +94,32 @@ func (b *Board) Display() {
 }
 
 func (b *Board) DisplayNoHidden() {
+	whilte := color.New(color.FgWhite)
+	boldWhite := whilte.Add(color.Bold)
+
+	fmt.Printf("   ")
+	for row := 0; row < b.numberRows; row++ {
+		boldWhite.Printf("%2d ", row)
+	}
+	println()
+
 	for row := 0; row < b.numberRows; row++ {
 		for column := 0; column < b.numberColumns; column++ {
+			if column == 0 {
+				boldWhite.Printf("%2d ", row)
+			}
+
 			if b.squares[row][column].isBomb {
-				print("B")
-			} else if b.squares[row][column].isFlagged() {
-				print("F")
+				print(" B ")
 			} else {
-				print(b.squares[row][column].value)
+				if b.squares[row][column].value == 0 {
+					print("   ")
+				} else {
+					fmt.Printf(" %d ", b.squares[row][column].value)
+				}
 			}
 		}
 		println()
 	}
+	println()
 }

@@ -14,4 +14,7 @@ func main() {
 	board.Flag(13, 2)
 	board.Play(12, 3)
 	board.Play(13, 2)
+	board.Play(14, 2)
+	board.Play(15, 2)
+	board.DisplayNoHidden()
 }
