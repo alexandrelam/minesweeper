@@ -53,11 +53,11 @@ func NewBoard(numberRows, numberColumns, numberBombs int) *Board {
 	// calculate values
 	for row := 0; row < numberRows; row++ {
 		for column := 0; column < numberColumns; column++ {
-			if b.squares[row][column].isBomb {
+			if b.squares[row][column].IsBomb {
 				continue
 			}
 
-			b.squares[row][column].value = b.countAdjacentMines(row, column)
+			b.squares[row][column].Value = b.countAdjacentMines(row, column)
 
 		}
 	}
@@ -83,13 +83,13 @@ func (b *Board) Display() {
 			}
 
 			if b.squares[row][column].isRevealed() {
-				if b.squares[row][column].isBomb {
+				if b.squares[row][column].IsBomb {
 					print(" B ")
 				} else {
-					if b.squares[row][column].value == 0 {
+					if b.squares[row][column].Value == 0 {
 						print("   ")
 					} else {
-						fmt.Printf(" %d ", b.squares[row][column].value)
+						fmt.Printf(" %d ", b.squares[row][column].Value)
 					}
 				}
 			} else if b.squares[row][column].isFlagged() {
@@ -119,17 +119,21 @@ func (b *Board) DisplayNoHidden() {
 				boldWhite.Printf("%2d ", row)
 			}
 
-			if b.squares[row][column].isBomb {
+			if b.squares[row][column].IsBomb {
 				print(" B ")
 			} else {
-				if b.squares[row][column].value == 0 {
+				if b.squares[row][column].Value == 0 {
 					print("   ")
 				} else {
-					fmt.Printf(" %d ", b.squares[row][column].value)
+					fmt.Printf(" %d ", b.squares[row][column].Value)
 				}
 			}
 		}
 		println()
 	}
 	println()
+}
+
+func (b *Board) GetSquare() [][]*Square {
+	return b.squares
 }

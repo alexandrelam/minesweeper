@@ -26,7 +26,7 @@ func (b *Board) Play(row, column int) {
 		return
 	}
 
-	if b.squares[row][column].isBomb {
+	if b.squares[row][column].IsBomb {
 		b.revealAll()
 		fmt.Println("BOOM!")
 		return
@@ -34,7 +34,7 @@ func (b *Board) Play(row, column int) {
 
 	b.squares[row][column].reveal()
 
-	if b.squares[row][column].value == 0 || (b.squares[row][column].isRevealed() && b.squares[row][column].value == b.countAdjacentFlag(row, column)) {
+	if b.squares[row][column].Value == 0 || (b.squares[row][column].isRevealed() && b.squares[row][column].Value == b.countAdjacentFlag(row, column)) {
 		for i := -1; i <= 1; i++ {
 			for j := -1; j <= 1; j++ {
 				if i == 0 && j == 0 {
@@ -60,7 +60,7 @@ func (b *Board) playRecursiveUtil(row, column int) {
 
 	b.squares[row][column].reveal()
 
-	if b.squares[row][column].value != 0 {
+	if b.squares[row][column].Value != 0 {
 		return
 	}
 
@@ -94,7 +94,7 @@ func (b *Board) countAdjacentMines(row, column int) int {
 				continue
 			}
 
-			if b.squares[row+i][column+j].isBomb {
+			if b.squares[row+i][column+j].IsBomb {
 				count++
 			}
 		}

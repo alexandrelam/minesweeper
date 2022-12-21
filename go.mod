@@ -2,7 +2,10 @@ module github.com/alexandrelam/minesweeper
 
 go 1.19
 
-require github.com/fatih/color v1.13.0
+require (
+	github.com/fatih/color v1.13.0
+	github.com/gorilla/websocket v1.5.0
+)
 
 require (
 	github.com/mattn/go-colorable v0.1.9 // indirect

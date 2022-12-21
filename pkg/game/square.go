@@ -7,37 +7,37 @@ const (
 )
 
 type Square struct {
-	state  int
-	value  int
-	isBomb bool
+	State  int
+	Value  int
+	IsBomb bool
 }
 
 func newSquare(isBomb bool) *Square {
 	return &Square{
-		state:  Hidden,
-		value:  0,
-		isBomb: isBomb,
+		State:  Hidden,
+		Value:  0,
+		IsBomb: isBomb,
 	}
 }
 
 func (s *Square) isRevealed() bool {
-	return s.state == Revealed
+	return s.State == Revealed
 }
 
 func (s *Square) isFlagged() bool {
-	return s.state == Flagged
+	return s.State == Flagged
 }
 
 func (s *Square) isHidden() bool {
-	return s.state == Hidden
+	return s.State == Hidden
 }
 
 func (s *Square) incrementValue() {
-	s.value++
+	s.Value++
 }
 
 func (s *Square) reveal() {
-	s.state = Revealed
+	s.State = Revealed
 }
 
 func (s *Square) flag() {
@@ -45,7 +45,7 @@ func (s *Square) flag() {
 		return
 	}
 
-	s.state = Flagged
+	s.State = Flagged
 }
 
 func (s *Square) unflag() {
@@ -53,13 +53,13 @@ func (s *Square) unflag() {
 		return
 	}
 
-	s.state = Hidden
+	s.State = Hidden
 }
 
 func (s *Square) setValue(value int) {
-	s.value = value
+	s.Value = value
 }
 
 func (s *Square) bomb() {
-	s.isBomb = true
+	s.IsBomb = true
 }
