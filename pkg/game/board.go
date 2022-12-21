@@ -14,6 +14,15 @@ type Board struct {
 	squares       [][]*Square
 }
 
+type IBoard interface {
+	NewBoard(numberRows, numberColumns, numberBombs int) *Board // create a new board
+	Play(row, column int)                                       // Play a square
+	Flag(row, column int)                                       // Flag a square
+	Unflag(row, column int)                                     // Unflag a square
+	Display()                                                   // display board with hidden squares
+	DisplayNoHidden()                                           // display board without hidden squares
+}
+
 func NewBoard(numberRows, numberColumns, numberBombs int) *Board {
 
 	if numberBombs > numberRows*numberColumns {
