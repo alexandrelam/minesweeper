@@ -34,6 +34,7 @@ export default function Home() {
             name="name"
             placeholder="Alexandre"
             required
+            autoComplete="off"
             pattern="[a-zA-Z0-9]*"
             className="border px-3 py-1 rounded"
           />
