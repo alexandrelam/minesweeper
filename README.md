@@ -32,7 +32,7 @@ action: CREATE_GAME, FLAG, UNFLAG, DIG
 }
 
 {
-  "type": "USERS_MOUSE",
+  "type": "USER_MOUSE",
   "data": {
     "id": "id",
     "name": "name",

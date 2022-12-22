@@ -1,8 +1,12 @@
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { ConnectedUsers } from "../../components/ConnectedUsers";
+import { Message, MessageType } from "../types/message";
+import { User } from "../types/users";
 
 export default function Game() {
   const router = useRouter();
+  const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
 
   useEffect(() => {
     if (!router.query.name) {
@@ -15,9 +19,12 @@ export default function Game() {
     });
 
     ws.addEventListener("message", (event) => {
-      // parse JSON message received from server
-      const data = JSON.parse(event.data);
-      console.log(data);
+      const message: Message = JSON.parse(event.data);
+
+      switch (message.type) {
+        case MessageType.CONNECTED_USERS:
+          setConnectedUsers(message.data);
+      }
     });
 
     return () => {
@@ -28,6 +35,7 @@ export default function Game() {
   return (
     <div>
       <h1>Game</h1>
+      <ConnectedUsers connectedUsers={connectedUsers} />
     </div>
   );
 }
