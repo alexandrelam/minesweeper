@@ -16,14 +16,7 @@
 }
 ```
 
-```json
-{
-  "action": "JOIN",
-  "name": "alexandre"
-}
-```
-
-action: CREATE_GAME, FLAG, UNFLAG, DIG, JOIN
+action: CREATE_GAME, FLAG, UNFLAG, DIG
 
 ## response
 

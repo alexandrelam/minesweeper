@@ -6,8 +6,11 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 var addr = flag.String("addr", ":8080", "http service address")
@@ -16,11 +19,20 @@ func main() {
 	flag.Parse()
 	hub := newHub()
 	go hub.run()
-	http.HandleFunc("/ws", func(w http.ResponseWriter, r *http.Request) {
-		serveWs(hub, w, r)
+
+	r := mux.NewRouter()
+	r.HandleFunc("/ws/{name}", func(w http.ResponseWriter, r *http.Request) {
+		name := mux.Vars(r)["name"]
+		fmt.Println(name)
+		serveWs(hub, w, r, name)
 	})
 
-	err := http.ListenAndServe(*addr, nil)
+	srv := &http.Server{
+		Handler: r,
+		Addr:    *addr,
+	}
+
+	err := srv.ListenAndServe()
 	if err != nil {
 		log.Fatal("ListenAndServe: ", err)
 	}
