@@ -38,11 +38,6 @@ func (c *Client) dig(row, column int) {
 }
 
 func (c *Client) sendBoard() {
-	jsonSquares, err := json.Marshal(board.GetSquare())
-
-	if err != nil {
-		panic(err)
-	}
-
-	c.hub.broadcast <- jsonSquares
+	response := newReponse(UPDATE_BOARD, board.GetSquare())
+	c.hub.broadcast <- response.toJSON()
 }

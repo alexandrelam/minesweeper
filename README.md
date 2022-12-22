@@ -20,20 +20,26 @@ action: CREATE_GAME, FLAG, UNFLAG, DIG
 
 ## response
 
-```
-board[][]
-
-```
-
-## mouse update
-
 ```json
 {
-  "id": "id",
-  "name": "name",
-  "mouseX": 0,
-  "mouseY": 0
+  "type": "UPDATE_BOARD",
+  "data": "board[][]"
+}
+
+{
+  "type": "CONNECTED_USERS",
+  "data": "users[]"
+}
+
+{
+  "type": "USERS_MOUSE",
+  "data": {
+    "id": "id",
+    "name": "name",
+    "mouseX": 0,
+    "mouseY": 0
+  }
 }
 ```
 
-This data is send by a user and received by all other users
+a update always contains a type and a data field

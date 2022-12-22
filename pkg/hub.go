@@ -59,11 +59,11 @@ func (h *Hub) run() {
 
 func sendUpdatedUsers(h *Hub) {
 	allUsers := GetAllUsers(h)
-	jsonAllUsers, _ := json.Marshal(allUsers)
+	response := newReponse(CONNECTED_USERS, allUsers)
 
 	for c := range h.clients {
 		select {
-		case c.send <- jsonAllUsers:
+		case c.send <- response.toJSON():
 		default:
 			close(c.send)
 			delete(h.clients, c)
