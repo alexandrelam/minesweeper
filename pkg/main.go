@@ -13,7 +13,7 @@ import (
 	jsoniter "github.com/json-iterator/go"
 )
 
-var addr = flag.String("addr", ":8080", "http service address")
+var addr = flag.String("addr", ":3001", "http service address")
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func main() {
