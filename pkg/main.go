@@ -6,7 +6,6 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -25,7 +24,6 @@ func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/ws/{name}", func(w http.ResponseWriter, r *http.Request) {
 		name := mux.Vars(r)["name"]
-		fmt.Println(name)
 		serveWs(hub, w, r, name)
 	})
 

@@ -5,7 +5,7 @@ const (
 	FLAG        = "FLAG"
 	UNFLAG      = "UNFLAG"
 	DIG         = "DIG"
-	JOIN        = "JOIN"
+	MOUSE       = "MOUSE"
 )
 
 type Action struct {
@@ -40,6 +40,8 @@ func (c *Client) parse(message []byte) {
 		json.Unmarshal(message, &actionSquare)
 
 		c.dig(actionSquare.Row, actionSquare.Column)
+	case MOUSE:
+		c.hub.broadcast <- message
 	}
 
 }

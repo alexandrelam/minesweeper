@@ -21,6 +21,19 @@ action: CREATE_GAME, FLAG, UNFLAG, DIG
 ## response
 
 ```
-byte: board[][]
+board[][]
 
 ```
+
+## mouse update
+
+```json
+{
+  "id": "id",
+  "name": "name",
+  "mouseX": 0,
+  "mouseY": 0
+}
+```
+
+This data is send by a user and received by all other users
