@@ -2,34 +2,62 @@ package game
 
 import "fmt"
 
-func (b *Board) Flag(row, column int) {
-	fmt.Println("flag", row, column)
+type PlayReturn struct {
+	IsPlayed bool
+	IsLost   bool
+}
+
+// return: true if the square is valid, false otherwise
+func (b *Board) Flag(row, column int) bool {
+	if !b.isValid(row, column) {
+		return false
+	}
+
+	if b.squares[row][column].isRevealed() {
+		return false
+	}
+
+	if b.squares[row][column].isFlagged() {
+		return false
+	}
+
 	b.squares[row][column].flag()
-
-	b.Display()
+	return true
 }
 
-func (b *Board) Unflag(row, column int) {
+// return: true if the square is valid, false otherwise
+func (b *Board) Unflag(row, column int) bool {
+	if !b.isValid(row, column) {
+		return false
+	}
+
+	if b.squares[row][column].isRevealed() {
+		return false
+	}
+
+	if !b.squares[row][column].isFlagged() {
+		return false
+	}
+
 	b.squares[row][column].unflag()
+	return true
 }
 
-func (b *Board) Play(row, column int) {
-	fmt.Println("play", row, column)
-
+func (b *Board) Play(row, column int) PlayReturn {
 	if !b.isValid(row, column) {
 		fmt.Println("invalid position")
-		return
+		return PlayReturn{false, false}
 	}
 
 	if b.squares[row][column].isFlagged() {
 		fmt.Println("cannot play on flagged square")
-		return
+		return PlayReturn{false, false}
 	}
 
 	if b.squares[row][column].IsBomb {
 		b.revealAll()
 		fmt.Println("BOOM!")
-		return
+		return PlayReturn{true, true}
 	}
 
 	b.squares[row][column].reveal()
@@ -46,7 +74,7 @@ func (b *Board) Play(row, column int) {
 		}
 	}
 
-	b.Display()
+	return PlayReturn{true, false}
 }
 
 func (b *Board) playRecursiveUtil(row, column int) {
@@ -77,8 +105,6 @@ func (b *Board) revealAll() {
 			square.reveal()
 		}
 	}
-
-	b.Display()
 }
 
 func (b *Board) isValid(row, column int) bool {

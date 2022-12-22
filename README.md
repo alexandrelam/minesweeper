@@ -11,8 +11,8 @@
 ```json
 {
   "action": "DIG", // FLAG, UNFLAG
-  "column": "0",
-  "row": "0"
+  "row": "0",
+  "column": "0"
 }
 ```
 
