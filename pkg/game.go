@@ -1,8 +1,6 @@
 package main
 
 import (
-	"encoding/json"
-
 	"github.com/alexandrelam/minesweeper/pkg/game"
 )
 

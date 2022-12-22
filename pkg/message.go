@@ -1,9 +1,5 @@
 package main
 
-import (
-	"encoding/json"
-)
-
 const (
 	CREATE_GAME = "CREATE_GAME"
 	FLAG        = "FLAG"

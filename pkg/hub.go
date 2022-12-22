@@ -34,11 +34,16 @@ func (h *Hub) run() {
 		select {
 		case client := <-h.register:
 			h.clients[client] = true
+			sendUpdatedUsers(h)
+
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client)
 				close(client.send)
+
+				sendUpdatedUsers(h)
 			}
+
 		case message := <-h.broadcast:
 			for client := range h.clients {
 				select {
@@ -48,6 +53,20 @@ func (h *Hub) run() {
 					delete(h.clients, client)
 				}
 			}
+		}
+	}
+}
+
+func sendUpdatedUsers(h *Hub) {
+	allUsers := GetAllUsers(h)
+	jsonAllUsers, _ := json.Marshal(allUsers)
+
+	for c := range h.clients {
+		select {
+		case c.send <- jsonAllUsers:
+		default:
+			close(c.send)
+			delete(h.clients, c)
 		}
 	}
 }
