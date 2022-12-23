@@ -9,8 +9,10 @@ type User struct {
 
 func GetUser(client *Client) *User {
 	return &User{
-		ID:   client.id,
-		Name: client.name,
+		ID:     client.id,
+		Name:   client.name,
+		MouseX: client.mouseX,
+		MouseY: client.mouseY,
 	}
 }
 
@@ -21,4 +23,25 @@ func GetAllUsers(hub *Hub) []*User {
 	}
 
 	return users
+}
+
+func (c *Client) userMouse(mouseX, mouseY int) {
+	c.mouseX = mouseX
+	c.mouseY = mouseY
+
+	sendUpdatedUsers(c.hub, USER_MOUSE)
+}
+
+func sendUpdatedUsers(h *Hub, responseType string) {
+	allUsers := GetAllUsers(h)
+	response := newReponse(responseType, allUsers)
+
+	for c := range h.clients {
+		select {
+		case c.send <- response.toJSON():
+		default:
+			close(c.send)
+			delete(h.clients, c)
+		}
+	}
 }

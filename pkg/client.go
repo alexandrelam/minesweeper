@@ -44,6 +44,10 @@ type Client struct {
 
 	id string
 
+	mouseX int
+
+	mouseY int
+
 	hub *Hub
 
 	// The websocket connection.

@@ -3,7 +3,6 @@ package main
 const (
 	UPDATE_BOARD    = "UPDATE_BOARD"
 	CONNECTED_USERS = "CONNECTED_USERS"
-	USER_MOUSE      = "USER_MOUSE"
 )
 
 type Response struct {

@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 import { ConnectedUsers } from "../../components/ConnectedUsers";
+import { Mouse } from "../../components/Mouse";
 import { mousemove } from "../../utils/mousemove";
 import { handleMessages } from "../../utils/websocket";
 import { User } from "../types/users";
@@ -39,6 +40,9 @@ export default function Game() {
     <div onMouseMove={(e) => mousemove(e, wsRef.current)} className="h-screen">
       <h1>Game</h1>
       <ConnectedUsers connectedUsers={connectedUsers} />
+      {connectedUsers.map((user) => (
+        <Mouse key={user.id} user={user} />
+      ))}
     </div>
   );
 }

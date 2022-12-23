@@ -5,7 +5,7 @@ const (
 	FLAG        = "FLAG"
 	UNFLAG      = "UNFLAG"
 	DIG         = "DIG"
-	MOUSE       = "MOUSE"
+	USER_MOUSE  = "USER_MOUSE"
 )
 
 type Action struct {
@@ -16,6 +16,12 @@ type ActionSquare struct {
 	Action string `json:"action"`
 	Row    int    `json:"row"`
 	Column int    `json:"column"`
+}
+
+type ActionMouse struct {
+	Action string `json:"action"`
+	MouseX int    `json:"mouseX"`
+	MouseY int    `json:"mouseY"`
 }
 
 func (c *Client) parse(message []byte) {
@@ -40,8 +46,11 @@ func (c *Client) parse(message []byte) {
 		json.Unmarshal(message, &actionSquare)
 
 		c.dig(actionSquare.Row, actionSquare.Column)
-	case MOUSE:
-		c.hub.broadcast <- message
+	case USER_MOUSE:
+		var actionMouse ActionMouse
+		json.Unmarshal(message, &actionMouse)
+
+		c.userMouse(actionMouse.MouseX, actionMouse.MouseY)
 	}
 
 }

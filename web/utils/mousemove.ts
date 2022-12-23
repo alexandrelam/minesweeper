@@ -4,11 +4,14 @@ export const mousemove = throttle((event: any, ws: WebSocket | undefined) => {
   if (!ws) return;
 
   const message = {
-    type: "USER_MOUSE",
-    data: {
-      mouseX: event.clientX,
-      mouseY: event.clientY,
-    },
+    action: "USER_MOUSE",
+    mouseX: event.clientX,
+    mouseY: event.clientY,
   };
-  console.log(message);
-}, 150);
+
+  try {
+    ws.send(JSON.stringify(message));
+  } catch (error) {
+    console.log(error);
+  }
+}, 40);
