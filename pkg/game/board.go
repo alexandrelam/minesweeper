@@ -43,11 +43,17 @@ func NewBoard(numberRows, numberColumns, numberBombs int) *Board {
 	}
 
 	// place bombs
-	for i := 0; i < numberBombs; i++ {
+	numberOfBombs := 0
+	for numberOfBombs < numberBombs {
 		row := rand.Intn(numberRows)
 		column := rand.Intn(numberColumns)
 
-		b.squares[row][column].bomb()
+		if b.squares[row][column].IsBomb {
+			continue
+		}
+
+		b.squares[row][column].IsBomb = true
+		numberOfBombs++
 	}
 
 	// calculate values
