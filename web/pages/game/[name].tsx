@@ -47,6 +47,11 @@ export default function Game() {
     };
   }, []);
 
+  function createNewGame() {
+    if (!websocket) return;
+    websocket.send(JSON.stringify({ action: MessageType.CREATE_GAME }));
+  }
+
   if (!websocket) {
     return <div>Loading...</div>;
   }
@@ -58,16 +63,24 @@ export default function Game() {
         <Mouse key={user.id} user={user} />
       ))}
       {board && board.length > 1 ? (
-        <div className="flex flex-col gap-0.5">
+        <div className="flex flex-col gap-0.5 ml-10 mt-10">
           {board.map((row, i) => (
             <div key={i} className="flex gap-0.5">
               {row.map((tile, j) => (
-                <Tile key={j} tile={tile} />
+                <Tile key={j} tile={tile} row={i} column={j} />
               ))}
             </div>
           ))}
         </div>
       ) : null}
+      <button
+        onClick={createNewGame}
+        className="ml-10 mt-10 px-5 py-2 bg-indigo-200
+                   text-indigo-500 rounded font-bold
+                   hover:bg-indigo-300 hover:text-indigo-600 hover:shadow-md"
+      >
+        Nouvelle partie
+      </button>
     </div>
   );
 }

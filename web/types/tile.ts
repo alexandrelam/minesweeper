@@ -1,7 +1,7 @@
-enum TileState {
-  Hidden = 0,
-  Visible = 1,
-  Flagged = 2,
+export enum TileState {
+  HIDDEN = 0,
+  REVEALED = 1,
+  FLAGGED = 2,
 }
 
 export type Tile = {
