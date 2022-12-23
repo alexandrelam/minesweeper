@@ -43,3 +43,8 @@ action: CREATE_GAME, FLAG, UNFLAG, DIG
 ```
 
 a update always contains a type and a data field
+
+## Todo
+
+- [ ] fix game create bomb
+- [ ] random board

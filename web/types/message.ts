@@ -4,7 +4,7 @@ export enum MessageType {
   USER_MOUSE = "USER_MOUSE",
 }
 
-export type Message = {
+export type Message<T = any> = {
   type: string;
-  data: any;
+  data: T;
 };

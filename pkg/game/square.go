@@ -7,9 +7,9 @@ const (
 )
 
 type Square struct {
-	State  int
-	Value  int
-	IsBomb bool
+	State  int  `json:"state"`
+	Value  int  `json:"value"`
+	IsBomb bool `json:"isBomb"`
 }
 
 func newSquare(isBomb bool) *Square {

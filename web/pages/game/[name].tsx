@@ -3,14 +3,32 @@ import { useState, useEffect, useContext } from "react";
 import { ConnectedUsers } from "../../components/ConnectedUsers";
 import { Mouse } from "../../components/Mouse";
 import { mousemove } from "../../utils/mousemove";
-import { handleMessages } from "../../utils/websocket";
-import { User } from "../types/users";
+import { User } from "../../types/users";
 import { WebSocketContext } from "../../provider/WebSocketProvider";
+import { Tile as TileType } from "../../types/tile";
+import { Message, MessageType } from "../../types/message";
+import { Tile } from "../../components/Tile";
 
 export default function Game() {
   const router = useRouter();
   const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
+  const [board, setBoard] = useState<TileType[][] | null>(null);
   const { websocket, setWebsocket } = useContext(WebSocketContext);
+
+  function handleMessages(event: MessageEvent) {
+    const message: Message = JSON.parse(event.data);
+
+    switch (message.type) {
+      case MessageType.CONNECTED_USERS:
+        const data: User[] = message.data;
+        setConnectedUsers(data);
+      case MessageType.UPDATE_BOARD:
+        const board: TileType[][] = message.data;
+        if (board === null) return;
+
+        setBoard(board);
+    }
+  }
 
   useEffect(() => {
     if (!router.query.name) {
@@ -21,14 +39,10 @@ export default function Game() {
 
     setWebsocket(ws);
 
-    ws.addEventListener("message", (event) => {
-      handleMessages(event, setConnectedUsers);
-    });
+    ws.addEventListener("message", handleMessages);
 
     return () => {
-      ws.removeEventListener("message", (event) =>
-        handleMessages(event, setConnectedUsers)
-      );
+      ws.removeEventListener("message", handleMessages);
       ws.close();
     };
   }, []);
@@ -39,11 +53,21 @@ export default function Game() {
 
   return (
     <div onMouseMove={(e) => mousemove(e, websocket)} className="h-screen">
-      <h1>Game</h1>
       <ConnectedUsers connectedUsers={connectedUsers} />
       {connectedUsers.map((user) => (
         <Mouse key={user.id} user={user} />
       ))}
+      {board && board.length > 1 ? (
+        <div className="flex flex-col gap-0.5">
+          {board.map((row, i) => (
+            <div key={i} className="flex gap-0.5">
+              {row.map((tile, j) => (
+                <Tile key={j} tile={tile} />
+              ))}
+            </div>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

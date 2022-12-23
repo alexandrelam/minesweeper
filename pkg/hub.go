@@ -4,6 +4,8 @@
 
 package main
 
+import "github.com/alexandrelam/minesweeper/pkg/game"
+
 // Hub maintains the set of active clients and broadcasts messages to the
 // clients.
 type Hub struct {
@@ -35,6 +37,13 @@ func (h *Hub) run() {
 		case client := <-h.register:
 			h.clients[client] = true
 			sendUpdatedUsers(h, CONNECTED_USERS)
+
+			if board == nil {
+				board = game.NewBoard(16, 16, 40)
+			}
+
+			response := newReponse(UPDATE_BOARD, board.GetSquare())
+			client.send <- response.toJSON()
 
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
