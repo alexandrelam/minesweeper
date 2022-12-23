@@ -9,7 +9,5 @@ export function handleMessages(
   switch (message.type) {
     case MessageType.CONNECTED_USERS:
       setConnectedUsers(message.data);
-    case MessageType.USER_MOUSE:
-      setConnectedUsers(message.data);
   }
 }

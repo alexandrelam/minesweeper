@@ -1,43 +1,44 @@
 import { useRouter } from "next/router";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useContext } from "react";
 import { ConnectedUsers } from "../../components/ConnectedUsers";
 import { Mouse } from "../../components/Mouse";
 import { mousemove } from "../../utils/mousemove";
 import { handleMessages } from "../../utils/websocket";
 import { User } from "../types/users";
+import { WebSocketContext } from "../../provider/WebSocketProvider";
 
 export default function Game() {
   const router = useRouter();
   const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
-  const wsRef = useRef<WebSocket>();
+  const { websocket, setWebsocket } = useContext(WebSocketContext);
 
   useEffect(() => {
     if (!router.query.name) {
       router.push("/");
     }
 
-    wsRef.current = new WebSocket(
-      `ws://localhost:3001/ws/${router.query.name}`
-    );
+    const ws = new WebSocket(`ws://localhost:3001/ws/${router.query.name}`);
 
-    wsRef.current.addEventListener("message", (event) => {
+    setWebsocket(ws);
+
+    ws.addEventListener("message", (event) => {
       handleMessages(event, setConnectedUsers);
     });
 
     return () => {
-      if (!wsRef.current) {
-        return;
-      }
-
-      wsRef.current.removeEventListener("message", (event) =>
+      ws.removeEventListener("message", (event) =>
         handleMessages(event, setConnectedUsers)
       );
-      wsRef.current.close();
+      ws.close();
     };
   }, []);
 
+  if (!websocket) {
+    return <div>Loading...</div>;
+  }
+
   return (
-    <div onMouseMove={(e) => mousemove(e, wsRef.current)} className="h-screen">
+    <div onMouseMove={(e) => mousemove(e, websocket)} className="h-screen">
       <h1>Game</h1>
       <ConnectedUsers connectedUsers={connectedUsers} />
       {connectedUsers.map((user) => (

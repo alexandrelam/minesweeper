@@ -29,7 +29,9 @@ func (c *Client) userMouse(mouseX, mouseY int) {
 	c.mouseX = mouseX
 	c.mouseY = mouseY
 
-	sendUpdatedUsers(c.hub, USER_MOUSE)
+	response := newReponse(USER_MOUSE, GetUser(c))
+
+	c.hub.broadcast <- response.toJSON()
 }
 
 func sendUpdatedUsers(h *Hub, responseType string) {

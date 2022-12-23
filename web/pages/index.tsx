@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { useRouter } from "next/router";
+import { WebSocketProvider } from "../provider/WebSocketProvider";
 
 export default function Home() {
   const router = useRouter();
