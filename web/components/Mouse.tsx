@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import { MessageType } from "../pages/types/message";
-import { User } from "../pages/types/users";
+import { Message, MessageType } from "../types/message";
+import { User } from "../types/users";
 import { WebSocketContext } from "../provider/WebSocketProvider";
 
 type Props = {
@@ -20,7 +20,7 @@ export function Mouse({ user }: Props) {
   if (!websocket) return null;
 
   websocket.addEventListener("message", (event) => {
-    const message = JSON.parse(event.data);
+    const message: Message<User> = JSON.parse(event.data);
 
     if (message.type === MessageType.USER_MOUSE) {
       if (message.data.id !== user.id) return;

@@ -1,4 +1,4 @@
-import { User } from "../pages/types/users";
+import { User } from "../types/users";
 
 type Props = {
   connectedUsers: User[];
