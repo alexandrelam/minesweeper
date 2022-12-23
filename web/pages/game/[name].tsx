@@ -27,6 +27,10 @@ export default function Game() {
         if (!message.data || board) return;
         setBoard(message.data);
         break;
+      case MessageType.GAME_LOST:
+        setBoard(message.data);
+        alert("Vous avez perdu");
+        break;
     }
   }
 
