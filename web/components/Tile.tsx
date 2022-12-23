@@ -41,6 +41,7 @@ export function Tile({ tile, row, column }: Props) {
             column,
           })
         );
+        break;
     }
   }
 
@@ -58,6 +59,7 @@ export function Tile({ tile, row, column }: Props) {
             column,
           })
         );
+        break;
       case TileState.FLAGGED:
         websocket.send(
           JSON.stringify({
@@ -66,6 +68,7 @@ export function Tile({ tile, row, column }: Props) {
             column,
           })
         );
+        break;
     }
   }
 

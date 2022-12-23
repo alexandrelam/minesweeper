@@ -13,6 +13,7 @@ func (c *Client) createGame() {
 
 func (c *Client) flag(row, column int) {
 	played := board.Flag(row, column)
+
 	if played {
 		c.sendBoard()
 	}
@@ -29,7 +30,8 @@ func (c *Client) dig(row, column int) {
 	playStatus := board.Play(row, column)
 	if playStatus.IsPlayed == true {
 		if playStatus.IsLost == true {
-			c.hub.broadcast <- []byte("BOOM!")
+			response := newReponse(GAME_LOST, nil)
+			c.hub.broadcast <- response.toJSON()
 			return
 		} else {
 			c.sendBoard()

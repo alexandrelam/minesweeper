@@ -22,11 +22,11 @@ export default function Game() {
       case MessageType.CONNECTED_USERS:
         const data: User[] = message.data;
         setConnectedUsers(data);
+        break;
       case MessageType.UPDATE_BOARD:
-        const board: TileType[][] = message.data;
-        if (board === null) return;
-
-        setBoard(board);
+        if (!message.data || board) return;
+        setBoard(message.data);
+        break;
     }
   }
 
@@ -49,6 +49,7 @@ export default function Game() {
 
   function createNewGame() {
     if (!websocket) return;
+    setBoard(null);
     websocket.send(JSON.stringify({ action: MessageType.CREATE_GAME }));
   }
 

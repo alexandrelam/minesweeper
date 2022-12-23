@@ -1,6 +1,7 @@
 package main
 
 const (
+	GAME_LOST       = "GAME_LOST"
 	UPDATE_BOARD    = "UPDATE_BOARD"
 	CONNECTED_USERS = "CONNECTED_USERS"
 )
