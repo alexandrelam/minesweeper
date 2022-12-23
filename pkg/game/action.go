@@ -82,7 +82,7 @@ func (b *Board) playRecursiveUtil(row, column int) {
 		return
 	}
 
-	if b.squares[row][column].isFlagged() || b.squares[row][column].isRevealed() {
+	if b.squares[row][column].isFlagged() || b.squares[row][column].isRevealed() || b.squares[row][column].IsBomb {
 		return
 	}
 
