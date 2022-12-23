@@ -70,6 +70,15 @@ function Tile({ tile, row, column }: Props) {
           })
         );
         break;
+      case TileState.REVEALED:
+        websocket.send(
+          JSON.stringify({
+            action: "DIG",
+            row,
+            column,
+          })
+        );
+        break;
     }
   }
 
