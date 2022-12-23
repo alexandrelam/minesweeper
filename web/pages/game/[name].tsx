@@ -7,7 +7,7 @@ import { User } from "../../types/users";
 import { WebSocketContext } from "../../provider/WebSocketProvider";
 import { Tile as TileType } from "../../types/tile";
 import { Message, MessageType } from "../../types/message";
-import { Tile } from "../../components/Tile";
+import { MemoizedTile } from "../../components/Tile";
 
 export default function Game() {
   const router = useRouter();
@@ -68,7 +68,7 @@ export default function Game() {
           {board.map((row, i) => (
             <div key={i} className="flex gap-0.5">
               {row.map((tile, j) => (
-                <Tile key={j} tile={tile} row={i} column={j} />
+                <MemoizedTile key={`${i}${j}`} tile={tile} row={i} column={j} />
               ))}
             </div>
           ))}

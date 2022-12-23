@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { memo, useContext } from "react";
 import { WebSocketContext } from "../provider/WebSocketProvider";
 import { Tile as TileType, TileState } from "../types/tile";
 
@@ -8,7 +8,7 @@ type Props = {
   column: number;
 };
 
-export function Tile({ tile, row, column }: Props) {
+function Tile({ tile, row, column }: Props) {
   const { websocket } = useContext(WebSocketContext);
 
   if (!websocket) {
@@ -113,3 +113,7 @@ export function Tile({ tile, row, column }: Props) {
     </div>
   );
 }
+
+export const MemoizedTile = memo(Tile, (prevProps, nextProps) => {
+  return prevProps.tile.state === nextProps.tile.state;
+});
