@@ -29,6 +29,34 @@ export function Tile({ tile, row, column }: Props) {
     }
   }
 
+  function backgroundColor() {
+    if (tile.state === TileState.HIDDEN) return "bg-slate-400";
+    return "bg-slate-200";
+  }
+
+  function textColor() {
+    switch (tile.value) {
+      case 0:
+        return "text-black";
+      case 1:
+        return "text-blue-500";
+      case 2:
+        return "text-green-500";
+      case 3:
+        return "text-red-500";
+      case 4:
+        return "text-purple-500";
+      case 5:
+        return "text-yellow-500";
+      case 6:
+        return "text-orange-500";
+      case 7:
+        return "text-pink-500";
+      case 8:
+        return "text-gray-500";
+    }
+  }
+
   function handleLeftClick() {
     if (!websocket) return;
 
@@ -76,11 +104,12 @@ export function Tile({ tile, row, column }: Props) {
     <div
       onClick={handleLeftClick}
       onContextMenu={handleRightClick}
-      className="flex justify-center items-center 
-                 w-10 h-10 bg-blue-100 border border-blue-300
-                 rounded text-blue-500 text-lg font-bold"
+      className={`flex justify-center items-center 
+                 w-10 h-10 ${backgroundColor()} border border-slate-200
+                 rounded ${textColor()} text-lg font-bold`}
     >
       {display()}
+      <div className="hidden "></div>
     </div>
   );
 }
