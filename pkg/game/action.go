@@ -62,14 +62,39 @@ func (b *Board) Play(row, column int) PlayReturn {
 
 	b.squares[row][column].reveal()
 
-	if b.squares[row][column].Value == 0 || (b.squares[row][column].isRevealed() && b.squares[row][column].Value == b.countAdjacentFlag(row, column)) {
+	// if tile is doesn't have bomb around it, bomb cannot explode
+	if b.squares[row][column].Value == 0 {
 		for i := -1; i <= 1; i++ {
 			for j := -1; j <= 1; j++ {
 				if i == 0 && j == 0 {
 					continue
 				}
 
-				b.playRecursiveUtil(row+i, column+j)
+				hasExploded := b.playRecursiveUtil(row+i, column+j, false)
+				if hasExploded {
+					b.revealAll()
+					fmt.Println("BOOM!")
+					return PlayReturn{true, true}
+				}
+			}
+		}
+
+	}
+
+	// else bomb can explode
+	if b.squares[row][column].isRevealed() && b.squares[row][column].Value == b.countAdjacentFlag(row, column) {
+		for i := -1; i <= 1; i++ {
+			for j := -1; j <= 1; j++ {
+				if i == 0 && j == 0 {
+					continue
+				}
+
+				hasExploded := b.playRecursiveUtil(row+i, column+j, true)
+				if hasExploded {
+					b.revealAll()
+					fmt.Println("BOOM!")
+					return PlayReturn{true, true}
+				}
 			}
 		}
 	}
@@ -77,26 +102,33 @@ func (b *Board) Play(row, column int) PlayReturn {
 	return PlayReturn{true, false}
 }
 
-func (b *Board) playRecursiveUtil(row, column int) {
+// return true if bomb has exploded
+func (b *Board) playRecursiveUtil(row, column int, canBombExplode bool) bool {
 	if !b.isValid(row, column) {
-		return
+		return false
 	}
 
-	if b.squares[row][column].isFlagged() || b.squares[row][column].isRevealed() || b.squares[row][column].IsBomb {
-		return
+	if canBombExplode && !b.squares[row][column].isFlagged() && b.squares[row][column].IsBomb {
+		return true
+	}
+
+	if b.squares[row][column].isFlagged() || b.squares[row][column].isRevealed() {
+		return false
 	}
 
 	b.squares[row][column].reveal()
 
 	if b.squares[row][column].Value != 0 {
-		return
+		return false
 	}
 
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
-			b.playRecursiveUtil(row+i, column+j)
+			b.playRecursiveUtil(row+i, column+j, canBombExplode)
 		}
 	}
+
+	return false
 }
 
 func (b *Board) revealAll() {
