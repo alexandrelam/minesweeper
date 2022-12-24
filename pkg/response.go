@@ -2,8 +2,6 @@ package main
 
 import (
 	"time"
-
-	"github.com/alexandrelam/minesweeper/pkg/game"
 )
 
 const (
@@ -32,22 +30,26 @@ func (r *Response) toJSON() []byte {
 }
 
 type Event struct {
-	Action     string           `json:"action"`
-	AuthorID   string           `json:"authorID"`
-	AuthorName string           `json:"authorName"`
-	Date       string           `json:"date"`
-	Board      [][]*game.Square `json:"board"`
+	Action     string `json:"action"`
+	AuthorID   string `json:"authorID"`
+	AuthorName string `json:"authorName"`
+	Date       string `json:"date"`
+	Row        int    `json:"row"`
+	Column     int    `json:"column"`
 }
+
+var NilEvent = Event{}
 
 var history []Event = []Event{}
 
-func newEvent(action, authorID, authorName string, board [][]*game.Square) Event {
+func newEvent(action, authorID, authorName string, row, colomn int) Event {
 	return Event{
 		Action:     action,
 		AuthorID:   authorID,
 		AuthorName: authorName,
 		Date:       time.Now().Format("2006-01-02 15:04:05"),
-		Board:      board,
+		Row:        row,
+		Column:     colomn,
 	}
 }
 

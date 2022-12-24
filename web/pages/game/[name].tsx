@@ -24,14 +24,14 @@ export default function Game() {
         setConnectedUsers(data);
         break;
       case MessageType.UPDATE_BOARD:
-        setBoard((message as Message<EventMessage>).data.board);
+        setBoard(message.data);
         break;
       case MessageType.GAME_LOST:
-        setBoard((message as Message<EventMessage>).data.board);
+        setBoard(message.data);
         alert("Dommage, vous avez perdu !");
         break;
       case MessageType.GAME_WON:
-        setBoard((message as Message<EventMessage>).data.board);
+        setBoard(message.data);
         alert("Bravo, vous avez gagné !");
         break;
       case MessageType.HISTORY:

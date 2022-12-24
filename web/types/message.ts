@@ -1,5 +1,3 @@
-import { Tile } from "./tile";
-
 export enum MessageType {
   UPDATE_BOARD = "UPDATE_BOARD",
   CONNECTED_USERS = "CONNECTED_USERS",
@@ -20,5 +18,6 @@ export type EventMessage = {
   authorID: string;
   authorName: string;
   date: string;
-  board: Tile[][];
+  row: number;
+  col: number;
 };
