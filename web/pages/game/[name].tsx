@@ -43,7 +43,7 @@ export default function Game() {
       router.push("/");
     }
 
-    const ws = new WebSocket(`ws://localhost:3001/ws/${router.query.name}`);
+    const ws = new WebSocket(`ws://10.0.0.237:3001/ws/${router.query.name}`);
 
     setWebsocket(ws);
 
