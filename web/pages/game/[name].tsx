@@ -6,7 +6,7 @@ import { mousemove } from "../../utils/mousemove";
 import { User } from "../../types/users";
 import { WebSocketContext } from "../../provider/WebSocketProvider";
 import { Tile as TileType } from "../../types/tile";
-import { Message, MessageType } from "../../types/message";
+import { EventMessage, Message, MessageType } from "../../types/message";
 import { MemoizedTile } from "../../components/Tile";
 
 export default function Game() {
@@ -16,7 +16,7 @@ export default function Game() {
   const { websocket, setWebsocket } = useContext(WebSocketContext);
 
   function handleMessages(event: MessageEvent) {
-    const message: Message = JSON.parse(event.data);
+    let message: Message = JSON.parse(event.data);
 
     switch (message.type) {
       case MessageType.CONNECTED_USERS:
@@ -24,16 +24,18 @@ export default function Game() {
         setConnectedUsers(data);
         break;
       case MessageType.UPDATE_BOARD:
-        if (!message.data || board) return;
-        setBoard(message.data);
+        setBoard((message as Message<EventMessage>).data.board);
         break;
       case MessageType.GAME_LOST:
-        setBoard(message.data);
+        setBoard((message as Message<EventMessage>).data.board);
         alert("Dommage, vous avez perdu !");
         break;
       case MessageType.GAME_WON:
-        setBoard(message.data);
+        setBoard((message as Message<EventMessage>).data.board);
         alert("Bravo, vous avez gagné !");
+        break;
+      case MessageType.HISTORY:
+        console.log(message.data);
         break;
     }
   }
