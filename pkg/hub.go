@@ -45,6 +45,8 @@ func (h *Hub) run() {
 			response := newReponse(UPDATE_BOARD, board.GetSquare())
 			client.send <- response.toJSON()
 
+			client.sendHistory()
+
 		case client := <-h.unregister:
 			if _, ok := h.clients[client]; ok {
 				delete(h.clients, client)
