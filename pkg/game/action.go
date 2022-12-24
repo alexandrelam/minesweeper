@@ -60,7 +60,10 @@ func (b *Board) Play(row, column int) PlayReturn {
 		return PlayReturn{true, false, true}
 	}
 
-	b.squares[row][column].reveal()
+	if !b.squares[row][column].isRevealed() {
+		b.squares[row][column].reveal()
+		b.numberDugTiles++
+	}
 
 	// if tile is doesn't have bomb around it, bomb cannot explode
 	if b.squares[row][column].Value == 0 {
@@ -97,6 +100,11 @@ func (b *Board) Play(row, column int) PlayReturn {
 		}
 	}
 
+	if b.numberDugTiles == b.numberRows*b.numberColumns-b.numberBombs {
+		b.revealAll()
+		return PlayReturn{true, true, false}
+	}
+
 	return PlayReturn{true, false, false}
 }
 
@@ -115,6 +123,7 @@ func (b *Board) playRecursiveUtil(row, column int, canBombExplode bool) bool {
 	}
 
 	b.squares[row][column].reveal()
+	b.numberDugTiles++
 
 	if b.squares[row][column].Value != 0 {
 		return false

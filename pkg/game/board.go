@@ -8,19 +8,20 @@ import (
 )
 
 type Board struct {
-	numberRows    int
-	numberColumns int
-	numberBombs   int
-	squares       [][]*Square
+	numberRows     int
+	numberColumns  int
+	numberBombs    int
+	numberDugTiles int
+	squares        [][]*Square
 }
 
 type IBoard interface {
-	NewBoard(numberRows, numberColumns, numberBombs int) *Board // create a new board
-	Play(row, column int)                                       // Play a square
-	Flag(row, column int)                                       // Flag a square
-	Unflag(row, column int)                                     // Unflag a square
-	Display()                                                   // display board with hidden squares
-	DisplayNoHidden()                                           // display board without hidden squares
+	NewBoard(numberRows, numberColumns, numberBombs, numberDugTiles int) *Board // create a new board
+	Play(row, column int)                                                       // Play a square
+	Flag(row, column int)                                                       // Flag a square
+	Unflag(row, column int)                                                     // Unflag a square
+	Display()                                                                   // display board with hidden squares
+	DisplayNoHidden()                                                           // display board without hidden squares
 }
 
 func NewBoard(numberRows, numberColumns, numberBombs int) *Board {
@@ -31,9 +32,11 @@ func NewBoard(numberRows, numberColumns, numberBombs int) *Board {
 
 	// init board
 	b := &Board{
-		numberRows:    numberRows,
-		numberColumns: numberColumns,
-		squares:       make([][]*Square, numberRows),
+		numberRows:     numberRows,
+		numberColumns:  numberColumns,
+		numberBombs:    numberBombs,
+		numberDugTiles: 0,
+		squares:        make([][]*Square, numberRows),
 	}
 
 	for i := 0; i < numberRows; i++ {

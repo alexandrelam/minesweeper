@@ -29,6 +29,11 @@ export default function Game() {
         break;
       case MessageType.GAME_LOST:
         setBoard(message.data);
+        alert("Dommage, vous avez perdu !");
+        break;
+      case MessageType.GAME_WON:
+        setBoard(message.data);
+        alert("Bravo, vous avez gagné !");
         break;
     }
   }

@@ -4,6 +4,7 @@ export enum MessageType {
   USER_MOUSE = "USER_MOUSE",
   CREATE_GAME = "CREATE_GAME",
   GAME_LOST = "GAME_LOST",
+  GAME_WON = "GAME_WON",
 }
 
 export type Message<T = any> = {
