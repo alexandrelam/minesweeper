@@ -29,7 +29,6 @@ export default function Game() {
         break;
       case MessageType.GAME_LOST:
         setBoard(message.data);
-        alert("Vous avez perdu");
         break;
     }
   }

@@ -4,6 +4,7 @@ import "fmt"
 
 type PlayReturn struct {
 	IsPlayed bool
+	IsWin    bool
 	IsLost   bool
 }
 
@@ -46,18 +47,17 @@ func (b *Board) Unflag(row, column int) bool {
 func (b *Board) Play(row, column int) PlayReturn {
 	if !b.isValid(row, column) {
 		fmt.Println("invalid position")
-		return PlayReturn{false, false}
+		return PlayReturn{false, false, false}
 	}
 
 	if b.squares[row][column].isFlagged() {
 		fmt.Println("cannot play on flagged square")
-		return PlayReturn{false, false}
+		return PlayReturn{false, false, false}
 	}
 
 	if b.squares[row][column].IsBomb {
 		b.revealAll()
-		fmt.Println("BOOM!")
-		return PlayReturn{true, true}
+		return PlayReturn{true, false, true}
 	}
 
 	b.squares[row][column].reveal()
@@ -73,8 +73,7 @@ func (b *Board) Play(row, column int) PlayReturn {
 				hasExploded := b.playRecursiveUtil(row+i, column+j, false)
 				if hasExploded {
 					b.revealAll()
-					fmt.Println("BOOM!")
-					return PlayReturn{true, true}
+					return PlayReturn{true, false, true}
 				}
 			}
 		}
@@ -92,14 +91,13 @@ func (b *Board) Play(row, column int) PlayReturn {
 				hasExploded := b.playRecursiveUtil(row+i, column+j, true)
 				if hasExploded {
 					b.revealAll()
-					fmt.Println("BOOM!")
-					return PlayReturn{true, true}
+					return PlayReturn{true, false, true}
 				}
 			}
 		}
 	}
 
-	return PlayReturn{true, false}
+	return PlayReturn{true, false, false}
 }
 
 // return true if bomb has exploded

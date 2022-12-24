@@ -32,7 +32,9 @@ func (c *Client) dig(row, column int) {
 		if playStatus.IsLost == true {
 			response := newReponse(GAME_LOST, board.GetSquare())
 			c.hub.broadcast <- response.toJSON()
-			return
+		} else if playStatus.IsWin {
+			response := newReponse(GAME_WON, board.GetSquare())
+			c.hub.broadcast <- response.toJSON()
 		} else {
 			c.sendBoard()
 		}

@@ -2,6 +2,7 @@ package main
 
 const (
 	GAME_LOST       = "GAME_LOST"
+	GAME_WON        = "GAME_WON"
 	UPDATE_BOARD    = "UPDATE_BOARD"
 	CONNECTED_USERS = "CONNECTED_USERS"
 )
