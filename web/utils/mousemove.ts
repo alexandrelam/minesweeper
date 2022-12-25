@@ -14,4 +14,4 @@ export const mousemove = throttle((event: any, ws: WebSocket | undefined) => {
   } catch (error) {
     console.log(error);
   }
-}, 80);
+}, 100);

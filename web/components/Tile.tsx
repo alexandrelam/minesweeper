@@ -6,9 +6,10 @@ type Props = {
   tile: TileType;
   row: number;
   column: number;
+  isHighlighted?: boolean;
 };
 
-function Tile({ tile, row, column }: Props) {
+function Tile({ tile, row, column, isHighlighted }: Props) {
   const { websocket } = useContext(WebSocketContext);
 
   if (!websocket) {
@@ -114,15 +115,19 @@ function Tile({ tile, row, column }: Props) {
       onClick={handleLeftClick}
       onContextMenu={handleRightClick}
       className={`flex justify-center items-center 
-                 w-10 h-10 ${backgroundColor()} border border-slate-200
-                 rounded ${textColor()} text-lg font-bold`}
+                 w-10 h-10 ${backgroundColor()} border ${
+        isHighlighted ? "border-yellow-500 border-2" : "border-slate-200"
+      }
+                 rounded ${textColor()} text-lg font-bold `}
     >
       {display()}
-      <div className="hidden "></div>
     </div>
   );
 }
 
 export const MemoizedTile = memo(Tile, (prevProps, nextProps) => {
-  return prevProps.tile.state === nextProps.tile.state;
+  return (
+    prevProps.tile.state === nextProps.tile.state &&
+    prevProps.isHighlighted === nextProps.isHighlighted
+  );
 });

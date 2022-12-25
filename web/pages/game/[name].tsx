@@ -13,10 +13,14 @@ import { HistoryContext } from "../../provider/HistoryProvider";
 
 export default function Game() {
   const router = useRouter();
-  const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
-  const [board, setBoard] = useState<TileType[][] | null>(null);
+
   const { websocket, setWebsocket } = useContext(WebSocketContext);
   const { setHistory } = useContext(HistoryContext);
+
+  const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
+  const [board, setBoard] = useState<TileType[][] | null>(null);
+  // if no tiles are hovered, hoverTile is [-1, -1], otherwise it's [x, y]
+  const [hoverTile, setHoverTile] = useState<[number, number]>([-1, -1]);
 
   function handleMessages(event: MessageEvent) {
     let message: Message = JSON.parse(event.data);
@@ -87,13 +91,14 @@ export default function Game() {
                     tile={tile}
                     row={i}
                     column={j}
+                    isHighlighted={hoverTile[0] === j && hoverTile[1] === i}
                   />
                 ))}
               </div>
             ))}
           </div>
         ) : null}
-        <History />
+        <History setHoverTile={setHoverTile} />
       </div>
       <button
         onClick={createNewGame}

@@ -5,9 +5,10 @@ import { EventMessage } from "../types/message";
 
 type HistoryItemProps = {
   event: EventMessage;
+  setHoverTile: React.Dispatch<React.SetStateAction<[number, number]>>;
 };
 
-function HistoryItem({ event }: HistoryItemProps) {
+function HistoryItem({ event, setHoverTile }: HistoryItemProps) {
   function getIcon() {
     switch (event.action) {
       case ActionType.DIG:
@@ -24,7 +25,11 @@ function HistoryItem({ event }: HistoryItemProps) {
   const seconds = new Date(event.date).getSeconds();
 
   return (
-    <li>
+    <li
+      className="px-0.5 py-1 rounded cursor-default hover:bg-indigo-200"
+      onMouseEnter={() => setHoverTile([event.column, event.row])}
+      onMouseLeave={() => setHoverTile([-1, -1])}
+    >
       {getIcon()} {event.authorName}{" "}
       <span className="font-medium">
         {event.column} {event.row}
@@ -35,7 +40,11 @@ function HistoryItem({ event }: HistoryItemProps) {
   );
 }
 
-export function History() {
+type Props = {
+  setHoverTile: React.Dispatch<React.SetStateAction<[number, number]>>;
+};
+
+export function History({ setHoverTile }: Props) {
   const { history } = useContext(HistoryContext);
 
   const sortedHistory = history.sort((a, b) => {
@@ -47,7 +56,7 @@ export function History() {
       <h2 className="font-bold text-lg mb-4">History</h2>
       <ul>
         {sortedHistory.map((event, index) => (
-          <HistoryItem key={index} event={event} />
+          <HistoryItem key={index} event={event} setHoverTile={setHoverTile} />
         ))}
       </ul>
     </div>
