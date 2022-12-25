@@ -19,5 +19,5 @@ export type EventMessage = {
   authorName: string;
   date: string;
   row: number;
-  col: number;
+  column: number;
 };

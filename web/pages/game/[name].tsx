@@ -6,14 +6,17 @@ import { mousemove } from "../../utils/mousemove";
 import { User } from "../../types/users";
 import { WebSocketContext } from "../../provider/WebSocketProvider";
 import { Tile as TileType } from "../../types/tile";
-import { EventMessage, Message, MessageType } from "../../types/message";
+import { Message, MessageType } from "../../types/message";
 import { MemoizedTile } from "../../components/Tile";
+import { History } from "../../components/History";
+import { HistoryContext } from "../../provider/HistoryProvider";
 
 export default function Game() {
   const router = useRouter();
   const [connectedUsers, setConnectedUsers] = useState<User[]>([]);
   const [board, setBoard] = useState<TileType[][] | null>(null);
   const { websocket, setWebsocket } = useContext(WebSocketContext);
+  const { setHistory } = useContext(HistoryContext);
 
   function handleMessages(event: MessageEvent) {
     let message: Message = JSON.parse(event.data);
@@ -35,7 +38,7 @@ export default function Game() {
         alert("Bravo, vous avez gagné !");
         break;
       case MessageType.HISTORY:
-        console.log(message.data);
+        setHistory(message.data);
         break;
     }
   }
@@ -73,17 +76,25 @@ export default function Game() {
       {connectedUsers.map((user) => (
         <Mouse key={user.id} user={user} />
       ))}
-      {board && board.length > 1 ? (
-        <div className="flex flex-col gap-0.5 ml-10 mt-10">
-          {board.map((row, i) => (
-            <div key={i} className="flex gap-0.5">
-              {row.map((tile, j) => (
-                <MemoizedTile key={`${i}${j}`} tile={tile} row={i} column={j} />
-              ))}
-            </div>
-          ))}
-        </div>
-      ) : null}
+      <div className="flex gap-10 ml-10 mt-10">
+        {board && board.length > 1 ? (
+          <div className="flex flex-col gap-0.5">
+            {board.map((row, i) => (
+              <div key={i} className="flex gap-0.5">
+                {row.map((tile, j) => (
+                  <MemoizedTile
+                    key={`${i}${j}`}
+                    tile={tile}
+                    row={i}
+                    column={j}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        ) : null}
+        <History />
+      </div>
       <button
         onClick={createNewGame}
         className="ml-10 mt-10 px-5 py-2 bg-indigo-200
