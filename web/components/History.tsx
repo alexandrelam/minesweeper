@@ -17,6 +17,10 @@ function HistoryItem({ event, setHoverTile }: HistoryItemProps) {
         return "🚩";
       case ActionType.UNFLAG:
         return "🏳️";
+      case ActionType.GAME_LOST:
+        return "💥";
+      case ActionType.GAME_WON:
+        return "🎉";
     }
   }
 

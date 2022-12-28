@@ -38,10 +38,16 @@ func (c *Client) dig(row, column int) {
 	event := newEvent(DIG, c.id, c.name, row, column)
 	if playStatus.IsPlayed == true {
 		if playStatus.IsLost == true {
-			response := newReponse(GAME_LOST, event)
+			event.Action = GAME_LOST
+			appendEvent(event)
+			c.sendHistory()
+			response := newReponse(GAME_LOST, board.GetSquare())
 			c.hub.broadcast <- response.toJSON()
 		} else if playStatus.IsWin {
-			response := newReponse(GAME_WON, event)
+			event.Action = GAME_WON
+			appendEvent(event)
+			c.sendHistory()
+			response := newReponse(GAME_WON, board.GetSquare())
 			c.hub.broadcast <- response.toJSON()
 		} else {
 			c.sendBoard(event)
