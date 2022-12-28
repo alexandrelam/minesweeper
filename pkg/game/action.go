@@ -8,6 +8,11 @@ type PlayReturn struct {
 	IsLost   bool
 }
 
+type PlayRecursiveReturn struct {
+	IsPlayed bool
+	IsLost   bool
+}
+
 // return: true if the square is valid, false otherwise
 func (b *Board) Flag(row, column int) bool {
 	if !b.isValid(row, column) {
@@ -45,6 +50,8 @@ func (b *Board) Unflag(row, column int) bool {
 }
 
 func (b *Board) Play(row, column int) PlayReturn {
+	isPlayed := false
+
 	if !b.isValid(row, column) {
 		fmt.Println("invalid position")
 		return PlayReturn{false, false, false}
@@ -63,6 +70,7 @@ func (b *Board) Play(row, column int) PlayReturn {
 	if !b.squares[row][column].isRevealed() {
 		b.squares[row][column].reveal()
 		b.numberDugTiles++
+		isPlayed = true
 	}
 
 	// if tile is doesn't have bomb around it, bomb cannot explode
@@ -73,11 +81,12 @@ func (b *Board) Play(row, column int) PlayReturn {
 					continue
 				}
 
-				hasExploded := b.playRecursiveUtil(row+i, column+j, false)
-				if hasExploded {
-					b.revealAll()
-					return PlayReturn{true, false, true}
+				playRecursiveReturn := b.playRecursiveUtil(row+i, column+j, false)
+
+				if playRecursiveReturn.IsPlayed {
+					isPlayed = true
 				}
+
 			}
 		}
 
@@ -91,10 +100,12 @@ func (b *Board) Play(row, column int) PlayReturn {
 					continue
 				}
 
-				hasExploded := b.playRecursiveUtil(row+i, column+j, true)
-				if hasExploded {
+				playRecursiveReturn := b.playRecursiveUtil(row+i, column+j, true)
+				if playRecursiveReturn.IsLost {
 					b.revealAll()
 					return PlayReturn{true, false, true}
+				} else if playRecursiveReturn.IsPlayed {
+					isPlayed = true
 				}
 			}
 		}
@@ -105,37 +116,45 @@ func (b *Board) Play(row, column int) PlayReturn {
 		return PlayReturn{true, true, false}
 	}
 
-	return PlayReturn{true, false, false}
+	return PlayReturn{isPlayed, false, false}
 }
 
 // return true if bomb has exploded
-func (b *Board) playRecursiveUtil(row, column int, canBombExplode bool) bool {
+func (b *Board) playRecursiveUtil(row, column int, canBombExplode bool) PlayRecursiveReturn {
+	isPlayed := false
 	if !b.isValid(row, column) {
-		return false
+		return PlayRecursiveReturn{false, false}
 	}
 
 	if canBombExplode && !b.squares[row][column].isFlagged() && b.squares[row][column].IsBomb {
-		return true
+		return PlayRecursiveReturn{true, true}
 	}
 
 	if b.squares[row][column].isFlagged() || b.squares[row][column].isRevealed() {
-		return false
+		return PlayRecursiveReturn{false, false}
 	}
 
-	b.squares[row][column].reveal()
-	b.numberDugTiles++
+	if !b.squares[row][column].isRevealed() {
+		b.squares[row][column].reveal()
+		b.numberDugTiles++
+		isPlayed = true
+	}
 
 	if b.squares[row][column].Value != 0 {
-		return false
+		return PlayRecursiveReturn{isPlayed, false}
 	}
 
 	for i := -1; i <= 1; i++ {
 		for j := -1; j <= 1; j++ {
-			b.playRecursiveUtil(row+i, column+j, canBombExplode)
+			playRecursiveReturn := b.playRecursiveUtil(row+i, column+j, canBombExplode)
+
+			if playRecursiveReturn.IsPlayed {
+				isPlayed = true
+			}
 		}
 	}
 
-	return false
+	return PlayRecursiveReturn{isPlayed, false}
 }
 
 func (b *Board) revealAll() {
