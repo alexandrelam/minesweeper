@@ -1,6 +1,7 @@
-package main
+package websocket
 
 import (
+	"encoding/json"
 	"time"
 )
 

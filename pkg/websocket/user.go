@@ -1,4 +1,4 @@
-package main
+package websocket
 
 type User struct {
 	ID     string `json:"id"`

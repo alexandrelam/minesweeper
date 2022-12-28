@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-package main
+package websocket
 
 import (
 	"github.com/alexandrelam/minesweeper/pkg/game"
@@ -24,7 +24,7 @@ type Hub struct {
 	unregister chan *Client
 }
 
-func newHub() *Hub {
+func NewHub() *Hub {
 	return &Hub{
 		broadcast:  make(chan []byte),
 		register:   make(chan *Client),
@@ -33,7 +33,7 @@ func newHub() *Hub {
 	}
 }
 
-func (h *Hub) run() {
+func (h *Hub) Run() {
 	for {
 		select {
 		case client := <-h.register:

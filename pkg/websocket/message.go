@@ -1,4 +1,6 @@
-package main
+package websocket
+
+import "encoding/json"
 
 const (
 	CREATE_GAME = "CREATE_GAME"

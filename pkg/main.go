@@ -9,6 +9,7 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/alexandrelam/minesweeper/pkg/websocket"
 	"github.com/gorilla/mux"
 	jsoniter "github.com/json-iterator/go"
 )
@@ -18,13 +19,13 @@ var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 func main() {
 	flag.Parse()
-	hub := newHub()
-	go hub.run()
+	hub := websocket.NewHub()
+	go hub.Run()
 
 	r := mux.NewRouter()
 	r.HandleFunc("/ws/{name}", func(w http.ResponseWriter, r *http.Request) {
 		name := mux.Vars(r)["name"]
-		serveWs(hub, w, r, name)
+		websocket.ServeWs(hub, w, r, name)
 	})
 
 	srv := &http.Server{
